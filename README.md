@@ -1,48 +1,46 @@
-Overview
-========
+🚀 Overview
 
-Welcome to Astronomer! This project was generated after you ran 'astro dev init' using the Astronomer CLI. This readme describes the contents of the project, as well as how to run Apache Airflow on your local machine.
+Welcome to my Driver Safety Data Pipeline Project with Apache Airflow! This project was built using the Astronomer CLI to run and orchestrate workflows locally using Apache Airflow. It demonstrates how to use Airflow for scheduling and executing real-time or batch data pipelines — a key part of any production-grade AI or analytics system.
+📁 Project Structure
 
-Project Contents
-================
+This Airflow project contains the following files and directories:
+dags/ – Contains all the DAGs (Directed Acyclic Graphs) that define workflows.
+example_astronauts.py – A sample ETL pipeline that fetches astronaut data from the Open Notify API and dynamically prints details using TaskFlow API and dynamic task mapping. This DAG was used as a base for testing and learning.
+Dockerfile – Defines a versioned Astro Runtime image. This file can be customized to add OS-level packages or Python dependencies at runtime.
+include/ – Placeholder for any additional files or scripts (e.g., SQL scripts, configs) I may want to include in my pipeline.
+packages.txt – Used to list OS-level dependencies required by the project. Empty for now.
+requirements.txt – Used to add Python libraries (e.g., requests, pandas, etc.) required in my DAGs. Custom dependencies can be added here.
+plugins/ – A directory to store custom Airflow plugins, operators, or macros.
+airflow_settings.yaml – A convenient local-only config to define Airflow Connections, Variables, and Pools, without needing to input them manually via the UI.
+🧪 How to Run It Locally
 
-Your Astro project contains the following files and folders:
+1. Start Airflow
+Start the local Airflow environment using Astronomer CLI:
+astro dev start
+This command starts the following Airflow components in Docker containers:
+Postgres – Stores all Airflow metadata
+Webserver – Powers the Airflow UI (accessible via browser)
+Scheduler – Triggers and monitors DAG runs
+Triggerer – Executes deferred tasks (e.g., sensors, async tasks)
+2. Check Running Containers
+Verify everything’s up and running with:
+docker ps
+Webserver should be available on http://localhost:8080.
+Default login: Username: admin | Password: admin
+Postgres should be running on: localhost:5432/postgres
+3. Modify or Create Your Own DAGs
+You can create your own DAGs inside the dags/ folder.
+Restart the scheduler or webserver to pick up changes using:
+astro dev restart
+🚀 Deployment to Astronomer Cloud (Optional)
 
-- dags: This folder contains the Python files for your Airflow DAGs. By default, this directory includes one example DAG:
-    - `example_astronauts`: This DAG shows a simple ETL pipeline example that queries the list of astronauts currently in space from the Open Notify API and prints a statement for each astronaut. The DAG uses the TaskFlow API to define tasks in Python, and dynamic task mapping to dynamically print a statement for each astronaut. For more on how this DAG works, see our [Getting started tutorial](https://www.astronomer.io/docs/learn/get-started-with-airflow).
-- Dockerfile: This file contains a versioned Astro Runtime Docker image that provides a differentiated Airflow experience. If you want to execute other commands or overrides at runtime, specify them here.
-- include: This folder contains any additional files that you want to include as part of your project. It is empty by default.
-- packages.txt: Install OS-level packages needed for your project by adding them to this file. It is empty by default.
-- requirements.txt: Install Python packages needed for your project by adding them to this file. It is empty by default.
-- plugins: Add custom or community plugins for your project to this file. It is empty by default.
-- airflow_settings.yaml: Use this local-only file to specify Airflow Connections, Variables, and Pools instead of entering them in the Airflow UI as you develop DAGs in this project.
+If you have access to Astronomer Cloud, you can deploy this project by linking it to a remote Deployment using:
+astro deploy
+See full instructions in Astronomer's Deployment Guide
 
-Deploy Your Project Locally
-===========================
-
-1. Start Airflow on your local machine by running 'astro dev start'.
-
-This command will spin up 4 Docker containers on your machine, each for a different Airflow component:
-
-- Postgres: Airflow's Metadata Database
-- Webserver: The Airflow component responsible for rendering the Airflow UI
-- Scheduler: The Airflow component responsible for monitoring and triggering tasks
-- Triggerer: The Airflow component responsible for triggering deferred tasks
-
-2. Verify that all 4 Docker containers were created by running 'docker ps'.
-
-Note: Running 'astro dev start' will start your project with the Airflow Webserver exposed at port 8080 and Postgres exposed at port 5432. If you already have either of those ports allocated, you can either [stop your existing Docker containers or change the port](https://www.astronomer.io/docs/astro/cli/troubleshoot-locally#ports-are-not-available-for-my-local-airflow-webserver).
-
-3. Access the Airflow UI for your local Airflow project. To do so, go to http://localhost:8080/ and log in with 'admin' for both your Username and Password.
-
-You should also be able to access your Postgres Database at 'localhost:5432/postgres'.
-
-Deploy Your Project to Astronomer
-=================================
-
-If you have an Astronomer account, pushing code to a Deployment on Astronomer is simple. For deploying instructions, refer to Astronomer documentation: https://www.astronomer.io/docs/astro/deploy-code/
-
-Contact
-=======
-
-The Astronomer CLI is maintained with love by the Astronomer team. To report a bug or suggest a change, reach out to our support.
+💡 Use Case
+This setup serves as a foundation for future projects involving:
+ETL for driver behavior logs
+Data validation pipelines for sensor inputs (e.g., GPS, emotion, distractions)
+Preprocessing and aggregating data for ML training
+Alert pipelines triggering push notifications based on event rules
